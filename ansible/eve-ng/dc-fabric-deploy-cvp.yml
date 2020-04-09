@@ -45,7 +45,7 @@
       import_role:
           name: arista.avd.cvp_configlet_upload
       vars:
-        configlets_cvp_prefix: 'DC1-ABC'
+        configlets_cvp_prefix: 'DC1-AVD'
 
     - name: run CVP provisioning
       import_role:
