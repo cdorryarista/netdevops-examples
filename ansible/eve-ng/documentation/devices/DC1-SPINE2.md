@@ -60,13 +60,13 @@ vlan internal order ascending range 1006 1199
 
 | Name Server | Source VRF |
 | ----------- | ---------- |
-| 192.168.1.251 | MGMT |
+| 192.168.1.254 | MGMT |
 | 8.8.8.8 | MGMT |
 
 ### Name Servers Device Configuration
 
 ```eos
-ip name-server vrf MGMT 192.168.1.251
+ip name-server vrf MGMT 192.168.1.254
 ip name-server vrf MGMT 8.8.8.8
 !
 ```
@@ -169,12 +169,12 @@ No Port-Channels defined
 
 | Interface | Description | MTU | Type | Mode | Allowed VLANs (Trunk) | Trunk Group | VRF | IP Address | Channel-Group ID | Channel-Group Type |
 | --------- | ----------- | --- | ---- | ---- | --------------------- | ----------- | --- | ---------- | ---------------- | ------------------ |
-| Ethernet1 | P2P_LINK_TO_DC1-LEAF1A_Ethernet2 | 1500 | routed | access | - | - | - | 172.16.255.2/31 | - | - |
-| Ethernet2 | P2P_LINK_TO_DC1-LEAF1B_Ethernet2 | 1500 | routed | access | - | - | - | 172.16.255.6/31 | - | - |
-| Ethernet3 | P2P_LINK_TO_DC1-LEAF2A_Ethernet2 | 1500 | routed | access | - | - | - | 172.16.255.10/31 | - | - |
-| Ethernet4 | P2P_LINK_TO_DC1-LEAF2B_Ethernet2 | 1500 | routed | access | - | - | - | 172.16.255.14/31 | - | - |
-| Ethernet5 | P2P_LINK_TO_DC1-LEAF3A_Ethernet2 | 1500 | routed | access | - | - | - | 172.16.255.18/31 | - | - |
-| Ethernet6 | P2P_LINK_TO_DC1-LEAF3B_Ethernet2 | 1500 | routed | access | - | - | - | 172.16.255.22/31 | - | - |
+| Ethernet1 | P2P_LINK_TO_DC1-LEAF1A_Ethernet2 | 1500 | routed | access | - | - | - | 192.16.255.2/31 | - | - |
+| Ethernet2 | P2P_LINK_TO_DC1-LEAF1B_Ethernet2 | 1500 | routed | access | - | - | - | 192.16.255.6/31 | - | - |
+| Ethernet3 | P2P_LINK_TO_DC1-LEAF2A_Ethernet2 | 1500 | routed | access | - | - | - | 192.16.255.10/31 | - | - |
+| Ethernet4 | P2P_LINK_TO_DC1-LEAF2B_Ethernet2 | 1500 | routed | access | - | - | - | 192.16.255.14/31 | - | - |
+| Ethernet5 | P2P_LINK_TO_DC1-LEAF3A_Ethernet2 | 1500 | routed | access | - | - | - | 192.16.255.18/31 | - | - |
+| Ethernet6 | P2P_LINK_TO_DC1-LEAF3B_Ethernet2 | 1500 | routed | access | - | - | - | 192.16.255.22/31 | - | - |
 
 *Inherited from Port-Channel Interface
 
@@ -184,32 +184,32 @@ No Port-Channels defined
 interface Ethernet1
    description P2P_LINK_TO_DC1-LEAF1A_Ethernet2
    no switchport
-   ip address 172.16.255.2/31
+   ip address 192.16.255.2/31
 !
 interface Ethernet2
    description P2P_LINK_TO_DC1-LEAF1B_Ethernet2
    no switchport
-   ip address 172.16.255.6/31
+   ip address 192.16.255.6/31
 !
 interface Ethernet3
    description P2P_LINK_TO_DC1-LEAF2A_Ethernet2
    no switchport
-   ip address 172.16.255.10/31
+   ip address 192.16.255.10/31
 !
 interface Ethernet4
    description P2P_LINK_TO_DC1-LEAF2B_Ethernet2
    no switchport
-   ip address 172.16.255.14/31
+   ip address 192.16.255.14/31
 !
 interface Ethernet5
    description P2P_LINK_TO_DC1-LEAF3A_Ethernet2
    no switchport
-   ip address 172.16.255.18/31
+   ip address 192.16.255.18/31
 !
 interface Ethernet6
    description P2P_LINK_TO_DC1-LEAF3B_Ethernet2
    no switchport
-   ip address 172.16.255.22/31
+   ip address 192.16.255.22/31
 !
 ```
 
@@ -219,14 +219,14 @@ interface Ethernet6
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | EVPN_Overlay_Peering | Global Routing Table | 172.17.255.2/32 |
+| Loopback0 | EVPN_Overlay_Peering | Global Routing Table | 192.17.255.2/32 |
 
 ### Loopback Interfaces Device Configuration
 
 ```eos
 interface Loopback0
    description EVPN_Overlay_Peering
-   ip address 172.17.255.2/32
+   ip address 192.17.255.2/32
 !
 ```
 
@@ -280,22 +280,22 @@ no ip routing vrf MGMT
 
 | Sequence | Action |
 | -------- | ------ |
-| 10 | permit 172.17.255.0/24 le 32 |
+| 10 | permit 192.17.255.0/24 le 32 |
 
 **PL-P2P-UNDERLAY:**
 
 | Sequence | Action |
 | -------- | ------ |
-| 10 | permit 172.16.255.0/24 le 31 |
+| 10 | permit 192.16.255.0/24 le 31 |
 
 ### Prefix Lists Device Configuration
 
 ```eos
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-   seq 10 permit 172.17.255.0/24 le 32
+   seq 10 permit 192.17.255.0/24 le 32
 !
 ip prefix-list PL-P2P-UNDERLAY
-   seq 10 permit 172.16.255.0/24 le 31
+   seq 10 permit 192.16.255.0/24 le 31
 !
 ```
 
@@ -349,7 +349,7 @@ peer-filter LEAF-AS-RANGE
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65001|  172.17.255.2 |
+| 65001|  192.17.255.2 |
 
 | BGP Tuning |
 | ---------- |
@@ -374,12 +374,12 @@ peer-filter LEAF-AS-RANGE
 
 | Neighbor | Remote AS |
 | -------- | ---------
-| 172.17.255.3 | 65101  |
-| 172.17.255.4 | 65101  |
-| 172.17.255.5 | 65102  |
-| 172.17.255.6 | 65102  |
-| 172.17.255.7 | 65103  |
-| 172.17.255.8 | 65103  |
+| 192.17.255.3 | 65101  |
+| 192.17.255.4 | 65101  |
+| 192.17.255.5 | 65102  |
+| 192.17.255.6 | 65102  |
+| 192.17.255.7 | 65103  |
+| 192.17.255.8 | 65103  |
 
 *Inherited from peer group
 
@@ -393,12 +393,12 @@ peer-filter LEAF-AS-RANGE
 
 | Neighbor | Remote AS |
 | -------- | ---------
-| 172.16.255.3 | 65101  |
-| 172.16.255.7 | 65101  |
-| 172.16.255.11 | 65102  |
-| 172.16.255.15 | 65102  |
-| 172.16.255.19 | 65103  |
-| 172.16.255.23 | 65103  |
+| 192.16.255.3 | 65101  |
+| 192.16.255.7 | 65101  |
+| 192.16.255.11 | 65102  |
+| 192.16.255.15 | 65102  |
+| 192.16.255.19 | 65103  |
+| 192.16.255.23 | 65103  |
 
 *Inherited from peer group
 
@@ -414,7 +414,7 @@ peer-filter LEAF-AS-RANGE
 
 ```eos
 router bgp 65001
-   router-id 172.17.255.2
+   router-id 192.17.255.2
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    maximum-paths 2 ecmp 2
@@ -429,30 +429,30 @@ router bgp 65001
    neighbor IPv4-UNDERLAY-PEERS peer group
    neighbor IPv4-UNDERLAY-PEERS password 7 AQQvKeimxJu+uGQ/yYvv9w==
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
-   neighbor 172.16.255.3 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.16.255.3 remote-as 65101
-   neighbor 172.16.255.7 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.16.255.7 remote-as 65101
-   neighbor 172.16.255.11 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.16.255.11 remote-as 65102
-   neighbor 172.16.255.15 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.16.255.15 remote-as 65102
-   neighbor 172.16.255.19 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.16.255.19 remote-as 65103
-   neighbor 172.16.255.23 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.16.255.23 remote-as 65103
-   neighbor 172.17.255.3 peer group EVPN-OVERLAY-PEERS
-   neighbor 172.17.255.3 remote-as 65101
-   neighbor 172.17.255.4 peer group EVPN-OVERLAY-PEERS
-   neighbor 172.17.255.4 remote-as 65101
-   neighbor 172.17.255.5 peer group EVPN-OVERLAY-PEERS
-   neighbor 172.17.255.5 remote-as 65102
-   neighbor 172.17.255.6 peer group EVPN-OVERLAY-PEERS
-   neighbor 172.17.255.6 remote-as 65102
-   neighbor 172.17.255.7 peer group EVPN-OVERLAY-PEERS
-   neighbor 172.17.255.7 remote-as 65103
-   neighbor 172.17.255.8 peer group EVPN-OVERLAY-PEERS
-   neighbor 172.17.255.8 remote-as 65103
+   neighbor 192.16.255.3 peer group IPv4-UNDERLAY-PEERS
+   neighbor 192.16.255.3 remote-as 65101
+   neighbor 192.16.255.7 peer group IPv4-UNDERLAY-PEERS
+   neighbor 192.16.255.7 remote-as 65101
+   neighbor 192.16.255.11 peer group IPv4-UNDERLAY-PEERS
+   neighbor 192.16.255.11 remote-as 65102
+   neighbor 192.16.255.15 peer group IPv4-UNDERLAY-PEERS
+   neighbor 192.16.255.15 remote-as 65102
+   neighbor 192.16.255.19 peer group IPv4-UNDERLAY-PEERS
+   neighbor 192.16.255.19 remote-as 65103
+   neighbor 192.16.255.23 peer group IPv4-UNDERLAY-PEERS
+   neighbor 192.16.255.23 remote-as 65103
+   neighbor 192.17.255.3 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.17.255.3 remote-as 65101
+   neighbor 192.17.255.4 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.17.255.4 remote-as 65101
+   neighbor 192.17.255.5 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.17.255.5 remote-as 65102
+   neighbor 192.17.255.6 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.17.255.6 remote-as 65102
+   neighbor 192.17.255.7 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.17.255.7 remote-as 65103
+   neighbor 192.17.255.8 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.17.255.8 remote-as 65103
    redistribute connected route-map RM-CONN-2-BGP
    !
    address-family evpn

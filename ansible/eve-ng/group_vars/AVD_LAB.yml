@@ -16,14 +16,14 @@ local_users:
 cvp_instance_ips:
   - 192.168.100.100
 
-cvp_ingestauth_key: 
+cvp_ingestauth_key:
 
 # OOB Management network default gateway.
 mgmt_gateway: 192.168.100.252
 
 # dns servers.
 name_servers:
- - 192.168.1.251
+ - 192.168.1.254
  - 8.8.8.8
 
 # NTP Servers IP or DNS name, first NTP server will be prefered, and sourced from Managment

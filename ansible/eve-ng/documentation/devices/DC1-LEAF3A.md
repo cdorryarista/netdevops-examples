@@ -60,13 +60,13 @@ vlan internal order ascending range 1006 1199
 
 | Name Server | Source VRF |
 | ----------- | ---------- |
-| 192.168.1.251 | MGMT |
+| 192.168.1.254 | MGMT |
 | 8.8.8.8 | MGMT |
 
 ### Name Servers Device Configuration
 
 ```eos
-ip name-server vrf MGMT 192.168.1.251
+ip name-server vrf MGMT 192.168.1.254
 ip name-server vrf MGMT 8.8.8.8
 !
 ```
@@ -321,8 +321,8 @@ interface Port-Channel5
 
 | Interface | Description | MTU | Type | Mode | Allowed VLANs (Trunk) | Trunk Group | VRF | IP Address | Channel-Group ID | Channel-Group Type |
 | --------- | ----------- | --- | ---- | ---- | --------------------- | ----------- | --- | ---------- | ---------------- | ------------------ |
-| Ethernet1 | P2P_LINK_TO_DC1-SPINE1_Ethernet5 | 1500 | routed | access | - | - | - | 172.16.255.17/31 | - | - |
-| Ethernet2 | P2P_LINK_TO_DC1-SPINE2_Ethernet5 | 1500 | routed | access | - | - | - | 172.16.255.19/31 | - | - |
+| Ethernet1 | P2P_LINK_TO_DC1-SPINE1_Ethernet5 | 1500 | routed | access | - | - | - | 192.16.255.17/31 | - | - |
+| Ethernet2 | P2P_LINK_TO_DC1-SPINE2_Ethernet5 | 1500 | routed | access | - | - | - | 192.16.255.19/31 | - | - |
 | Ethernet3 | MLAG_PEER_DC1-LEAF3B_Ethernet3 | *1500 | *switched | *trunk | *2-4094 | *LEAF_PEER_L3<br> *MLAG | - | - | 3 | active |
 | Ethernet4 | MLAG_PEER_DC1-LEAF3B_Ethernet4 | *1500 | *switched | *trunk | *2-4094 | *LEAF_PEER_L3<br> *MLAG | - | - | 3 | active |
 | Ethernet5 | server03_Eth1 | *1500 | *switched | *trunk | *110-111,210-211 | - | - | - | 5 | active |
@@ -335,12 +335,12 @@ interface Port-Channel5
 interface Ethernet1
    description P2P_LINK_TO_DC1-SPINE1_Ethernet5
    no switchport
-   ip address 172.16.255.17/31
+   ip address 192.16.255.17/31
 !
 interface Ethernet2
    description P2P_LINK_TO_DC1-SPINE2_Ethernet5
    no switchport
-   ip address 172.16.255.19/31
+   ip address 192.16.255.19/31
 !
 interface Ethernet3
    description MLAG_PEER_DC1-LEAF3B_Ethernet3
@@ -362,8 +362,8 @@ interface Ethernet5
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | EVPN_Overlay_Peering | Global Routing Table | 172.17.255.7/32 |
-| Loopback1 | VTEP_VXLAN_Tunnel_Source | Global Routing Table | 172.17.254.7/32 |
+| Loopback0 | EVPN_Overlay_Peering | Global Routing Table | 192.17.255.7/32 |
+| Loopback1 | VTEP_VXLAN_Tunnel_Source | Global Routing Table | 192.17.254.7/32 |
 | Loopback100 | Tenant_A_OP_Zone_VTEP_DIAGNOSTICS | Tenant_A_OP_Zone | 10.255.1.7/32 |
 
 ### Loopback Interfaces Device Configuration
@@ -371,11 +371,11 @@ interface Ethernet5
 ```eos
 interface Loopback0
    description EVPN_Overlay_Peering
-   ip address 172.17.255.7/32
+   ip address 192.17.255.7/32
 !
 interface Loopback1
    description VTEP_VXLAN_Tunnel_Source
-   ip address 172.17.254.7/32
+   ip address 192.17.254.7/32
 !
 interface Loopback100
    description Tenant_A_OP_Zone_VTEP_DIAGNOSTICS
@@ -652,25 +652,25 @@ ip routing vrf Tenant_C_OP_Zone
 
 | Sequence | Action |
 | -------- | ------ |
-| 10 | permit 172.17.255.0/24 eq 32 |
-| 20 | permit 172.17.254.0/24 eq 32 |
+| 10 | permit 192.17.255.0/24 eq 32 |
+| 20 | permit 192.17.254.0/24 eq 32 |
 
 **PL-P2P-UNDERLAY:**
 
 | Sequence | Action |
 | -------- | ------ |
-| 10 | permit 172.16.255.0/24 le 31 |
+| 10 | permit 192.16.255.0/24 le 31 |
 | 20 | permit 10.255.251.0/24 le 31 |
 
 ### Prefix Lists Device Configuration
 
 ```eos
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-   seq 10 permit 172.17.255.0/24 eq 32
-   seq 20 permit 172.17.254.0/24 eq 32
+   seq 10 permit 192.17.255.0/24 eq 32
+   seq 20 permit 192.17.254.0/24 eq 32
 !
 ip prefix-list PL-P2P-UNDERLAY
-   seq 10 permit 172.16.255.0/24 le 31
+   seq 10 permit 192.16.255.0/24 le 31
    seq 20 permit 10.255.251.0/24 le 31
 !
 ```
@@ -730,7 +730,7 @@ No Peer Filters defined
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65103|  172.17.255.7 |
+| 65103|  192.17.255.7 |
 
 | BGP Tuning |
 | ---------- |
@@ -755,8 +755,8 @@ No Peer Filters defined
 
 | Neighbor | Remote AS |
 | -------- | ---------
-| 172.17.255.1 | *65001  |
-| 172.17.255.2 | *65001  |
+| 192.17.255.1 | *65001  |
+| 192.17.255.2 | *65001  |
 
 *Inherited from peer group
 
@@ -772,8 +772,8 @@ No Peer Filters defined
 
 | Neighbor | Remote AS |
 | -------- | ---------
-| 172.16.255.16 | *65001  |
-| 172.16.255.18 | *65001  |
+| 192.16.255.16 | *65001  |
+| 192.16.255.18 | *65001  |
 
 *Inherited from peer group
 
@@ -802,31 +802,31 @@ No Peer Filters defined
 
 | VLAN Aware Bundle | Route-Distinguisher | Route Target | Redistribute | VLANs |
 | ----------------- | ------------------- | ------------ | ------------ | ----- |
-| Tenant_A_APP_Zone | 172.17.255.7:12 | both 12:12 | learned | 130-131 |
-| Tenant_A_DB_Zone | 172.17.255.7:13 | both 13:13 | learned | 140-141 |
-| Tenant_A_NFS | 172.17.255.7:10161 | both 10161:10161 | learned | 161 |
-| Tenant_A_OP_Zone | 172.17.255.7:10 | both 10:10 | learned | 110-111 |
-| Tenant_A_VMOTION | 172.17.255.7:50160 | both 50160:50160 | learned | 160 |
-| Tenant_A_WEB_Zone | 172.17.255.7:11 | both 11:11 | learned | 120-121 |
-| Tenant_B_OP_Zone | 172.17.255.7:20 | both 20:20 | learned | 210-211 |
-| Tenant_C_OP_Zone | 172.17.255.7:30 | both 30:30 | learned | 310-311 |
+| Tenant_A_APP_Zone | 192.17.255.7:12 | both 12:12 | learned | 130-131 |
+| Tenant_A_DB_Zone | 192.17.255.7:13 | both 13:13 | learned | 140-141 |
+| Tenant_A_NFS | 192.17.255.7:10161 | both 10161:10161 | learned | 161 |
+| Tenant_A_OP_Zone | 192.17.255.7:10 | both 10:10 | learned | 110-111 |
+| Tenant_A_VMOTION | 192.17.255.7:50160 | both 50160:50160 | learned | 160 |
+| Tenant_A_WEB_Zone | 192.17.255.7:11 | both 11:11 | learned | 120-121 |
+| Tenant_B_OP_Zone | 192.17.255.7:20 | both 20:20 | learned | 210-211 |
+| Tenant_C_OP_Zone | 192.17.255.7:30 | both 30:30 | learned | 310-311 |
 
 #### Router BGP EVPN VRFs
 
 | VRF | Route-Distinguisher | Route Target | Redistribute |
 | --- | ------------------- | ------------ | ------------ |
-| Tenant_A_APP_Zone | 172.17.255.7:12 | import 12:12<br> export 12:12 | connected |
-| Tenant_A_DB_Zone | 172.17.255.7:13 | import 13:13<br> export 13:13 | connected |
-| Tenant_A_OP_Zone | 172.17.255.7:10 | import 10:10<br> export 10:10 | connected |
-| Tenant_A_WEB_Zone | 172.17.255.7:11 | import 11:11<br> export 11:11 | connected |
-| Tenant_B_OP_Zone | 172.17.255.7:20 | import 20:20<br> export 20:20 | connected |
-| Tenant_C_OP_Zone | 172.17.255.7:30 | import 30:30<br> export 30:30 | connected |
+| Tenant_A_APP_Zone | 192.17.255.7:12 | import 12:12<br> export 12:12 | connected |
+| Tenant_A_DB_Zone | 192.17.255.7:13 | import 13:13<br> export 13:13 | connected |
+| Tenant_A_OP_Zone | 192.17.255.7:10 | import 10:10<br> export 10:10 | connected |
+| Tenant_A_WEB_Zone | 192.17.255.7:11 | import 11:11<br> export 11:11 | connected |
+| Tenant_B_OP_Zone | 192.17.255.7:20 | import 20:20<br> export 20:20 | connected |
+| Tenant_C_OP_Zone | 192.17.255.7:30 | import 30:30<br> export 30:30 | connected |
 
 ### Router BGP Device Configuration
 
 ```eos
 router bgp 65103
-   router-id 172.17.255.7
+   router-id 192.17.255.7
    no bgp default ipv4-unicast
    distance bgp 20 200 200
    maximum-paths 2 ecmp 2
@@ -850,56 +850,56 @@ router bgp 65103
    neighbor MLAG-IPv4-UNDERLAY-PEER send-community
    neighbor MLAG-IPv4-UNDERLAY-PEER maximum-routes 12000
    neighbor 10.255.251.9 peer group MLAG-IPv4-UNDERLAY-PEER
-   neighbor 172.16.255.16 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.16.255.18 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.17.255.1 peer group EVPN-OVERLAY-PEERS
-   neighbor 172.17.255.2 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.16.255.16 peer group IPv4-UNDERLAY-PEERS
+   neighbor 192.16.255.18 peer group IPv4-UNDERLAY-PEERS
+   neighbor 192.17.255.1 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.17.255.2 peer group EVPN-OVERLAY-PEERS
    redistribute connected route-map RM-CONN-2-BGP
    !
    vlan-aware-bundle Tenant_A_APP_Zone
-      rd 172.17.255.7:12
+      rd 192.17.255.7:12
       route-target both 12:12
       redistribute learned
       vlan 130-131
    !
    vlan-aware-bundle Tenant_A_DB_Zone
-      rd 172.17.255.7:13
+      rd 192.17.255.7:13
       route-target both 13:13
       redistribute learned
       vlan 140-141
    !
    vlan-aware-bundle Tenant_A_NFS
-      rd 172.17.255.7:10161
+      rd 192.17.255.7:10161
       route-target both 10161:10161
       redistribute learned
       vlan 161
    !
    vlan-aware-bundle Tenant_A_OP_Zone
-      rd 172.17.255.7:10
+      rd 192.17.255.7:10
       route-target both 10:10
       redistribute learned
       vlan 110-111
    !
    vlan-aware-bundle Tenant_A_VMOTION
-      rd 172.17.255.7:50160
+      rd 192.17.255.7:50160
       route-target both 50160:50160
       redistribute learned
       vlan 160
    !
    vlan-aware-bundle Tenant_A_WEB_Zone
-      rd 172.17.255.7:11
+      rd 192.17.255.7:11
       route-target both 11:11
       redistribute learned
       vlan 120-121
    !
    vlan-aware-bundle Tenant_B_OP_Zone
-      rd 172.17.255.7:20
+      rd 192.17.255.7:20
       route-target both 20:20
       redistribute learned
       vlan 210-211
    !
    vlan-aware-bundle Tenant_C_OP_Zone
-      rd 172.17.255.7:30
+      rd 192.17.255.7:30
       route-target both 30:30
       redistribute learned
       vlan 310-311
@@ -915,42 +915,42 @@ router bgp 65103
       neighbor MLAG-IPv4-UNDERLAY-PEER activate
    !
    vrf Tenant_A_APP_Zone
-      rd 172.17.255.7:12
+      rd 192.17.255.7:12
       route-target import evpn 12:12
       route-target export evpn 12:12
       neighbor 10.255.251.9 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf Tenant_A_DB_Zone
-      rd 172.17.255.7:13
+      rd 192.17.255.7:13
       route-target import evpn 13:13
       route-target export evpn 13:13
       neighbor 10.255.251.9 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf Tenant_A_OP_Zone
-      rd 172.17.255.7:10
+      rd 192.17.255.7:10
       route-target import evpn 10:10
       route-target export evpn 10:10
       neighbor 10.255.251.9 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf Tenant_A_WEB_Zone
-      rd 172.17.255.7:11
+      rd 192.17.255.7:11
       route-target import evpn 11:11
       route-target export evpn 11:11
       neighbor 10.255.251.9 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf Tenant_B_OP_Zone
-      rd 172.17.255.7:20
+      rd 192.17.255.7:20
       route-target import evpn 20:20
       route-target export evpn 20:20
       neighbor 10.255.251.9 peer group MLAG-IPv4-UNDERLAY-PEER
       redistribute connected
    !
    vrf Tenant_C_OP_Zone
-      rd 172.17.255.7:30
+      rd 192.17.255.7:30
       route-target import evpn 30:30
       route-target export evpn 30:30
       neighbor 10.255.251.9 peer group MLAG-IPv4-UNDERLAY-PEER

@@ -59,7 +59,7 @@ name_server:
   source:
     vrf: MGMT
   nodes:
-    - 192.168.1.251
+    - 192.168.1.254
     - 8.8.8.8
 
 ### NTP Servers ###
@@ -185,6 +185,7 @@ port_channel_interfaces:
     description: server01_PortChanne1
     vlans: 110
     mode: trunk
+    mlag: 5
 
 ### Ethernet Interfaces ###
 ethernet_interfaces:
@@ -195,7 +196,7 @@ ethernet_interfaces:
     description: P2P_LINK_TO_DC1-SPINE1_Ethernet1
     mtu: 1500
     type: routed
-    ip_address: 172.16.255.1/31
+    ip_address: 192.16.255.1/31
   Ethernet2:
     peer: DC1-SPINE2
     peer_interface: Ethernet1
@@ -203,7 +204,7 @@ ethernet_interfaces:
     description: P2P_LINK_TO_DC1-SPINE2_Ethernet1
     mtu: 1500
     type: routed
-    ip_address: 172.16.255.3/31
+    ip_address: 192.16.255.3/31
 ## mlag interfaces ##
   Ethernet3:
     peer: DC1-LEAF1B
@@ -232,28 +233,17 @@ ethernet_interfaces:
       id: 5
       mode: "active"
     profile: TENANT_A
-  Ethernet5:
-    peer: server01
-    peer_interface: Eth5
-    peer_type: server
-    description: server01_Eth5
-    mode: trunk
-    vlans: 110
-    channel_group:
-      id: 5
-      mode: "active"
-    profile: TENANT_A
 
 
 ### Loopback Interfaces ###
 loopback_interfaces:
   Loopback0:
     description: EVPN_Overlay_Peering
-    ip_address: 172.17.255.3/32
+    ip_address: 192.17.255.3/32
 
   Loopback1:
     description: VTEP_VXLAN_Tunnel_Source
-    ip_address: 172.17.254.3/32
+    ip_address: 192.17.254.3/32
 
 ### Management Interfaces ###
 management_interfaces:
@@ -391,13 +381,13 @@ prefix_lists:
   PL-LOOPBACKS-EVPN-OVERLAY:
     sequence_numbers:
       10:
-        action: "permit 172.17.255.0/24 eq 32"
+        action: "permit 192.17.255.0/24 eq 32"
       20:
-        action: "permit 172.17.254.0/24 eq 32"
+        action: "permit 192.17.254.0/24 eq 32"
   PL-P2P-UNDERLAY:
     sequence_numbers:
       10:
-        action: "permit 172.16.255.0/24 le 31"
+        action: "permit 192.16.255.0/24 le 31"
       20:
         action: "permit 10.255.251.0/24 le 31"
 
@@ -427,7 +417,7 @@ route_maps:
 ### Routing - BGP ###
 router_bgp:
   as: 65101
-  router_id: 172.17.255.3
+  router_id: 192.17.255.3
   bgp_defaults:
     - no bgp default ipv4-unicast
     - distance bgp 20 200 200
@@ -456,13 +446,13 @@ router_bgp:
       maximum_routes: 12000
       send_community: true
   neighbors:
-    172.16.255.0:
+    192.16.255.0:
       peer_group: IPv4-UNDERLAY-PEERS
-    172.16.255.2:
+    192.16.255.2:
       peer_group: IPv4-UNDERLAY-PEERS
-    172.17.255.1:
+    192.17.255.1:
       peer_group: EVPN-OVERLAY-PEERS
-    172.17.255.2:
+    192.17.255.2:
       peer_group: EVPN-OVERLAY-PEERS
     10.255.251.1:
       peer_group: MLAG-IPv4-UNDERLAY-PEER
@@ -472,7 +462,7 @@ router_bgp:
   vlan_aware_bundles:
 ## tech_friday_demo ##
     tf_web_zone:
-      rd: "172.17.255.3:40"
+      rd: "192.17.255.3:40"
       route_targets:
         both:
           asn: "40:40"
@@ -481,7 +471,7 @@ router_bgp:
       vlan: 410-411
 ## Tenant_A ##
     Tenant_A_APP_Zone:
-      rd: "172.17.255.3:12"
+      rd: "192.17.255.3:12"
       route_targets:
         both:
           asn: "12:12"
@@ -489,7 +479,7 @@ router_bgp:
         - learned
       vlan: 130-131
     Tenant_A_WEB_Zone:
-      rd: "172.17.255.3:11"
+      rd: "192.17.255.3:11"
       route_targets:
         both:
           asn: "11:11"
@@ -502,7 +492,7 @@ router_bgp:
   vrfs:
 ## tech_friday_demo ##
     tf_web_zone:
-      rd: "172.17.255.3:40"
+      rd: "192.17.255.3:40"
       route_targets:
         import:
           address_family: evpn
@@ -517,7 +507,7 @@ router_bgp:
         - connected
 ## Tenant_A ##
     Tenant_A_APP_Zone:
-      rd: "172.17.255.3:12"
+      rd: "192.17.255.3:12"
       route_targets:
         import:
           address_family: evpn
@@ -531,7 +521,7 @@ router_bgp:
       redistribute_routes:
         - connected
     Tenant_A_WEB_Zone:
-      rd: "172.17.255.3:11"
+      rd: "192.17.255.3:11"
       route_targets:
         import:
           address_family: evpn

@@ -10,15 +10,15 @@ fabric_name: DC1_FABRIC
 
 # Point to Point Network Summary range, assigned as /31 for each uplink interfaces
 # Assign range larger then total [ spines * total potential leafs * 2 ]
-underlay_p2p_network_summary: 172.16.255.0/24
+underlay_p2p_network_summary: 192.16.255.0/24
 
 # IP address range for evpn loopback for all switches in fabric, assigned as /32s
 # Assign range larger then total spines + total leafs switches
-overlay_loopback_network_summary: 172.17.255.0/24
+overlay_loopback_network_summary: 192.17.255.0/24
 
 # VTEP VXLAN Tunnel source loopback IP for leaf switches, assigned in /32s
 # Assign range larger then total leaf switches
-vtep_loopback_network_summary: 172.17.254.0/24
+vtep_loopback_network_summary: 192.17.254.0/24
 
 # mlag pair IP assignment - assign blocks - Assign range larger then total spines + total leafs switches
 mlag_ips:
