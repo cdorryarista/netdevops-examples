@@ -136,5 +136,5 @@ bfd_multihop:
 cv_configlets:
   containers:
     DC1_FABRIC:
-      - DC1-CUSTOM_ALIASES
-      - DC1-CUSTOM_TACACS
+      - DC1-AVD_ALIASES
+      - DC1-AVD_TACACS
